@@ -1,429 +1,463 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth bg-zinc-950">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Carlo Delhez: A ZX81 Legacy</title>
+    <title>Carlo Delhez | ZX81 Pioneer & Physicist</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <!-- Chosen Palette: Warm Antiquity (Stone, Amber, and Deep Teal for a respectful, archival, yet interactive feel) -->
-    <!-- Application Structure Plan: The SPA is structured as a "Living Wikipedia Draft". It uses a dual-column layout on large screens: a persistent navigation/structure guide on the left (mimicking Wikipedia's table of contents), and the rich, interactive content on the right. This allows the user to explore the tribute while simultaneously seeing how the information maps to a standard encyclopedic format. Interactive elements (charts, simulated terminals) bring his software achievements to life. -->
-    <!-- Visualization & Content Choices: 
-         1. Emulation Performance Chart -> Goal: Compare speed -> Viz: Bar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Visually demonstrates the technical marvel of achieving 100%+ speed on limited 286 hardware. 
-         2. Interactive Assembler Simulation -> Goal: Demonstrate the "crash recovery" feature -> Viz: CSS/HTML Terminal Block -> Interaction: Clickable buttons to "run" and "recover" -> Justification: Directly honors the user's specific memory of learning Z80 dynamically and safely.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #fafaf9; /* stone-50 */
-            color: #292524; /* stone-800 */
-        }
-        h1, h2, h3, .serif {
-            font-family: 'Merriweather', serif;
-        }
-        .mono {
-            font-family: 'Fira Code', monospace;
-        }
-        
-        /* Strict Chart Container Styling */
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 350px;
-            max-height: 400px;
-        }
-        @media (max-width: 640px) {
-            .chart-container {
-                height: 250px;
-            }
-        }
-
-        /* Terminal styling */
-        .terminal {
-            background-color: #1c1917; /* stone-900 */
-            color: #4ade80; /* green-400 */
-            border-radius: 0.5rem;
-            padding: 1rem;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
-        .terminal-crash {
-            color: #ef4444 !important; /* red-500 */
-            animation: glitch 0.2s linear infinite;
-        }
-        
-        @keyframes glitch {
-            0% { transform: translate(0) }
-            20% { transform: translate(-2px, 1px) }
-            40% { transform: translate(-1px, -1px) }
-            60% { transform: translate(2px, 1px) }
-            80% { transform: translate(1px, -1px) }
-            100% { transform: translate(0) }
-        }
-
-        /* Smooth scroll for nav */
-        html {
-            scroll-behavior: smooth;
-        }
-    </style>
-</head>
-<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row gap-12">
-        
-        <!-- Sidebar Navigation (Wikipedia Structure) -->
-        <aside class="md:w-1/4 flex-shrink-0">
-            <div class="sticky top-12 bg-white p-6 rounded-xl shadow-sm border border-stone-200">
-                <div class="text-amber-700 text-sm font-bold tracking-wider uppercase mb-4">Wikipedia Draft Structure</div>
-                <nav class="space-y-3" id="toc">
-                    <a href="#intro" class="block text-stone-600 hover:text-amber-600 font-medium transition-colors">1. Introduction</a>
-                    <a href="#biography" class="block text-stone-600 hover:text-amber-600 font-medium transition-colors">2. Biography & Context</a>
-                    <a href="#emulation" class="block text-stone-600 hover:text-amber-600 font-medium transition-colors">3. Emulation Work</a>
-                    <a href="#software" class="block text-stone-600 hover:text-amber-600 font-medium transition-colors">4. Software Contributions</a>
-                    <a href="#legacy" class="block text-stone-600 hover:text-amber-600 font-medium transition-colors">5. Legacy</a>
-                </nav>
-                <div class="mt-8 pt-6 border-t border-stone-200">
-                    <p class="text-xs text-stone-500 italic">"Keeping the memory alive in communities where his contributions are understood and recognized."</p>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="md:w-3/4 space-y-16 pb-24">
-            
-            <!-- Header Section -->
-            <header id="intro" class="space-y-6">
-                <div class="inline-flex items-center space-x-2 bg-stone-200 text-stone-700 px-3 py-1 rounded-full text-sm font-semibold">
-                    <span>&#128190;</span>
-                    <span>Digital Heritage Tribute</span>
-                </div>
-                <h1 class="text-4xl md:text-5xl font-bold text-stone-900 leading-tight">Dr. Carlo Delhez</h1>
-                <p class="text-xl md:text-2xl text-stone-600 serif italic">A pioneer in preserving and expanding the Sinclair ZX81 ecosystem.</p>
-                
-                <div class="bg-amber-50 border-l-4 border-amber-600 p-6 rounded-r-lg shadow-sm">
-                    <h3 class="text-lg font-bold text-amber-900 mb-2">About this Document</h3>
-                    <p class="text-stone-700 leading-relaxed">
-                        This interactive page serves as both a tribute to Dr. Carlo Delhez and a structured resource designed to facilitate the creation of a Wikipedia entry. It documents his vital work in keeping the ZX81 platform alive through high-performance emulators and robust development tools, even during the era when the ZX Spectrum dominated the 8-bit landscape.
-                    </p>
-                </div>
-            </header>
-
-            <!-- Biography Section -->
-            <section id="biography" class="scroll-mt-12">
-                <h2 class="text-3xl font-bold text-stone-800 mb-6 border-b-2 border-stone-200 pb-2">Biography & Context</h2>
-                <div class="prose max-w-none text-stone-700 space-y-4 leading-relaxed">
-                    <p>
-                        In the history of home computing, the Sinclair ZX81 holds a unique place. Released in 1981, its stark monochrome graphics and membrane keyboard were quickly overshadowed by its colorful successor, the ZX Spectrum. However, for many, the ZX81 was the foundational gateway to programming.
-                    </p>
-                    <p>
-                        <strong>Dr. Carlo Delhez</strong> recognized the enduring educational and technical value of this machine. Rather than abandoning the platform as the market moved on, Delhez dedicated significant effort to ensuring the ZX81 environment could survive and thrive on newer hardware. His work bridged the gap between the original 8-bit microcomputers and the emerging 16-bit PC-compatible and Motorola 68000 (Sinclair QL) architectures.
-                    </p>
-                </div>
-            </section>
-
-            <!-- Emulation Work Section -->
-            <section id="emulation" class="scroll-mt-12">
-                <h2 class="text-3xl font-bold text-stone-800 mb-6 border-b-2 border-stone-200 pb-2">Emulation Masterpieces</h2>
-                <p class="text-stone-700 leading-relaxed mb-8">
-                    One of Dr. Delhez's most remarkable technical achievements was his development of ZX81 emulators. Emulation in the late 1980s and early 1990s was exceptionally difficult due to the low clock speeds of host machines. Delhez managed to write emulation software that ran at <strong>100% or more of the original machine's speed on a humble 10 MHz 80286 processor</strong>. He also extended this capability to the Sinclair QL.
-                </p>
-
-                <div class="bg-white p-6 rounded-xl shadow-md border border-stone-100 mb-8">
-                    <h3 class="text-xl font-bold text-stone-800 mb-4 text-center">Relative Execution Speed Analysis</h3>
-                    <p class="text-sm text-stone-500 text-center mb-6">Comparing native ZX81 clock speed logic against Delhez's emulation targets.</p>
-                    
-                    <!-- Required Chart Container -->
-                    <div class="chart-container">
-                        <canvas id="emulationChart"></canvas>
-                    </div>
-                    
-                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                        <div class="p-4 bg-stone-50 rounded-lg">
-                            <div class="text-2xl font-bold text-teal-700">3.25 MHz</div>
-                            <div class="text-sm text-stone-600">Original Z80 Clock</div>
-                        </div>
-                        <div class="p-4 bg-stone-50 rounded-lg border-2 border-amber-200">
-                            <div class="text-2xl font-bold text-amber-700">100%+</div>
-                            <div class="text-sm text-stone-600">Speed on 10MHz 286</div>
-                        </div>
-                        <div class="p-4 bg-stone-50 rounded-lg">
-                            <div class="text-2xl font-bold text-teal-700">Native</div>
-                            <div class="text-sm text-stone-600">Sinclair QL Port</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Software Contributions Section -->
-            <section id="software" class="scroll-mt-12">
-                <h2 class="text-3xl font-bold text-stone-800 mb-6 border-b-2 border-stone-200 pb-2">Software & Development Tools</h2>
-                <p class="text-stone-700 leading-relaxed mb-6">
-                    Beyond hardware preservation, Delhez enriched the ZX81 software ecosystem. His two most prominent contributions were <strong>Coral BASIC</strong> and a highly robust <strong>Z80 Assembler</strong>.
-                </p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                    <div class="bg-teal-50 p-6 rounded-xl border border-teal-100">
-                        <h3 class="text-xl font-bold text-teal-900 mb-3 flex items-center">
-                            <span class="mr-2">&#128214;</span> Coral BASIC
-                        </h3>
-                        <p class="text-teal-800 text-sm leading-relaxed">
-                            An advanced BASIC dialect tailored for the ZX81 environment. It provided extended commands and optimized execution routines, allowing developers to write more complex and faster programs than the standard Sinclair ROM permitted, pushing the boundaries of the 1K-16K machine.
-                        </p>
-                    </div>
-                    
-                    <div class="bg-amber-50 p-6 rounded-xl border border-amber-100">
-                        <h3 class="text-xl font-bold text-amber-900 mb-3 flex items-center">
-                            <span class="mr-2">&#9881;</span> The Forgiving Assembler
-                        </h3>
-                        <p class="text-amber-800 text-sm leading-relaxed">
-                            Learning Machine Code (Z80) natively was notoriously difficult; a single misplaced byte would crash the machine, losing hours of unsaved work. Delhez's Assembler environment running via emulation featured state-saving and easy crash recovery.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Interactive Terminal Simulation -->
-                <div class="bg-stone-800 rounded-xl overflow-hidden shadow-xl">
-                    <div class="bg-stone-900 px-4 py-2 flex items-center justify-between border-b border-stone-700">
-                        <span class="text-stone-400 text-xs font-mono">Delhez Z80 Assembler Environment</span>
-                        <div class="flex space-x-2">
-                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-stone-300 text-sm mb-4">Experience the memory: When learning Z80, a bad jump (`JP 0x0000` to the wrong place) meant a total lockup. In Delhez's environment, recovery was just keystrokes away—like reversing time in a video game.</p>
-                        
-                        <div id="terminal-window" class="terminal mono text-sm h-40 overflow-y-auto mb-4 flex flex-col justify-end">
-                            <div>> SYSTEM READY</div>
-                            <div>> LOAD "USER_PROGRAM.ASM"</div>
-                            <div>> ASSEMBLING... OK</div>
-                            <div>> RUN</div>
-                            <div id="term-cursor" class="animate-pulse">_</div>
-                        </div>
-
-                        <div class="flex space-x-4">
-                            <button id="btn-crash" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold transition-colors text-sm">
-                                Inject Fatal Bug (JP 0xFFFF)
-                            </button>
-                            <button id="btn-recover" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded font-semibold transition-colors text-sm opacity-50 cursor-not-allowed" disabled>
-                                Delhez Instant Recovery
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Legacy Section -->
-            <section id="legacy" class="scroll-mt-12">
-                <h2 class="text-3xl font-bold text-stone-800 mb-6 border-b-2 border-stone-200 pb-2">Legacy & Community Impact</h2>
-                <div class="bg-white p-8 rounded-xl shadow-sm border border-stone-200">
-                    <p class="text-stone-700 leading-relaxed mb-4">
-                        We strongly believe in keeping the memory of pioneers alive, especially within communities where their specific, highly technical contributions are deeply understood and recognized.
-                    </p>
-                    <p class="text-stone-700 leading-relaxed mb-4">
-                        For a generation of programmers, Dr. Carlo Delhez was not just a developer; he was an enabler. By creating tools that forgave mistakes—allowing users to reverse a crash as if "reversing a few seconds before a character died in a game"—he lowered the barrier to entry for low-level programming. 
-                    </p>
-                    <p class="text-stone-700 leading-relaxed font-semibold">
-                        His emulators ensured that when the physical hardware inevitably degraded, the software, the logic, and the culture of the ZX81 lived on flawlessly in the PC era.
-                    </p>
-                    
-                    <div class="mt-8 pt-6 border-t border-stone-100">
-                        <h4 class="text-stone-900 font-bold mb-3">Wikipedia Inclusion Criteria (Drafting Notes)</h4>
-                        <ul class="list-disc list-inside text-stone-600 text-sm space-y-2">
-                            <li><strong>Notability:</strong> Creation of highly efficient cross-platform emulation (286/QL) historically significant to retro-computing preservation.</li>
-                            <li><strong>Key Software:</strong> Coral BASIC, Z80 Assembler, PC81 / XT/AT emulators.</li>
-                            <li><strong>References to seek for WP article:</strong> Sinclair user group newsletters (late 80s/early 90s), QL community archives, ZX81 preservation society forums.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-        </main>
-    </div>
-
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <script>
-        // Data for Chart.js
-        const chartData = {
-            labels: ['Original ZX81 Hardware', 'Delhez Emulator (10MHz 286)', 'Delhez Emulator (Sinclair QL)'],
-            datasets: [{
-                label: 'Relative Emulation Speed (%)',
-                data: [100, 105, 100], // Representing 100%+ speed
-                backgroundColor: [
-                    'rgba(28, 25, 23, 0.7)',  // stone-900
-                    'rgba(217, 119, 6, 0.8)', // amber-600
-                    'rgba(15, 118, 110, 0.7)' // teal-700
-                ],
-                borderColor: [
-                    'rgba(28, 25, 23, 1)',
-                    'rgba(217, 119, 6, 1)',
-                    'rgba(15, 118, 110, 1)'
-                ],
-                borderWidth: 1,
-                borderRadius: 4
-            }]
-        };
-
-        // Chart Configuration
-        const config = {
-            type: 'bar',
-            data: chartData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, // CRITICAL for container to control height
-                plugins: {
-                    legend: {
-                        display: false
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.parsed.y + '% of original hardware speed';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 120,
-                        title: {
-                            display: true,
-                            text: 'Speed relative to 3.25MHz native (%)'
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            callback: function(value) {
-                                // Label wrapping logic (approx 16 chars)
-                                const label = this.getLabelForValue(value);
-                                if (label.length > 16) {
-                                    const words = label.split(' ');
-                                    let lines = [];
-                                    let currentLine = '';
-                                    words.forEach(word => {
-                                        if ((currentLine + word).length > 16) {
-                                            lines.push(currentLine.trim());
-                                            currentLine = word + ' ';
-                                        } else {
-                                            currentLine += word + ' ';
-                                        }
-                                    });
-                                    lines.push(currentLine.trim());
-                                    return lines;
-                                }
-                                return label;
-                            }
-                        }
+                    colors: {
+                        zxred: '#e11d48', // rose-600
+                        zxredglow: 'rgba(225, 29, 72, 0.4)',
                     }
                 }
             }
-        };
-
-        // Initialize Chart
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('emulationChart').getContext('2d');
-            new Chart(ctx, config);
-
-            // Active Navigation Highlighting logic
-            const sections = document.querySelectorAll("section, header");
-            const navLinks = document.querySelectorAll("#toc a");
-
-            window.addEventListener("scroll", () => {
-                let current = "";
-                sections.forEach((section) => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 150) {
-                        current = section.getAttribute("id");
-                    }
-                });
-
-                navLinks.forEach((link) => {
-                    link.classList.remove("text-amber-600", "font-bold");
-                    link.classList.add("text-stone-600");
-                    if (link.getAttribute("href").includes(current)) {
-                        link.classList.remove("text-stone-600");
-                        link.classList.add("text-amber-600", "font-bold");
-                    }
-                });
-            });
-        });
-
-        // Interactive Terminal Logic
-        const terminalWindow = document.getElementById('terminal-window');
-        const btnCrash = document.getElementById('btn-crash');
-        const btnRecover = document.getElementById('btn-recover');
-        let terminalState = 'normal';
-
-        function appendToTerminal(text, isCrash = false) {
-            const cursor = document.getElementById('term-cursor');
-            if (cursor) cursor.remove();
-            
-            const newLine = document.createElement('div');
-            newLine.innerText = text;
-            if (isCrash) {
-                newLine.classList.add('terminal-crash');
-            }
-            terminalWindow.appendChild(newLine);
-            
-            const newCursor = document.createElement('div');
-            newCursor.id = 'term-cursor';
-            newCursor.className = 'animate-pulse';
-            newCursor.innerText = '_';
-            terminalWindow.appendChild(newCursor);
-            
-            terminalWindow.scrollTop = terminalWindow.scrollHeight;
+        }
+    </script>
+    <style>
+        body {
+            color: #e4e4e7;
+            /* zinc-200 */
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 15% 50%, rgba(225, 29, 72, 0.05), transparent 35%),
+                radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.03), transparent 35%);
         }
 
-        btnCrash.addEventListener('click', () => {
-            if (terminalState === 'normal') {
-                terminalState = 'crashed';
-                appendToTerminal('> EXECUTING USER CODE...', false);
-                setTimeout(() => {
-                    appendToTerminal('ERR: STACK OVERFLOW', true);
-                    appendToTerminal('HALT: CPU LOCKED AT 0xFFFF', true);
-                    document.getElementById('term-cursor').style.display = 'none'; // Lock cursor
-                    
-                    btnCrash.classList.add('opacity-50', 'cursor-not-allowed');
-                    btnCrash.disabled = true;
-                    
-                    btnRecover.classList.remove('opacity-50', 'cursor-not-allowed');
-                    btnRecover.disabled = false;
-                    btnRecover.classList.add('animate-bounce');
-                }, 400);
-            }
-        });
+        ::selection {
+            background-color: rgba(225, 29, 72, 0.3);
+            color: white;
+        }
 
-        btnRecover.addEventListener('click', () => {
-            if (terminalState === 'crashed') {
-                terminalState = 'normal';
-                
-                // Clear terminal and simulate recovery
-                terminalWindow.innerHTML = '';
-                btnRecover.classList.remove('animate-bounce');
-                
-                appendToTerminal('> KEYSTROKE INTERRUPT DETECTED...');
-                setTimeout(() => {
-                    appendToTerminal('> RESTORING STATE FROM MEMORY SNAPSHOT...');
-                }, 300);
-                setTimeout(() => {
-                    appendToTerminal('> SYSTEM RECOVERED.');
-                    appendToTerminal('> RUN');
-                    
-                    btnRecover.classList.add('opacity-50', 'cursor-not-allowed');
-                    btnRecover.disabled = true;
-                    
-                    btnCrash.classList.remove('opacity-50', 'cursor-not-allowed');
-                    btnCrash.disabled = false;
-                }, 800);
+        /* CRT Grid Pattern */
+        .crt-bg {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center center;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-nav {
+            background: rgba(9, 9, 11, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: linear-gradient(180deg, rgba(39, 39, 42, 0.4) 0%, rgba(24, 24, 27, 0.4) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(225, 29, 72, 0.4);
+            box-shadow: 0 10px 40px -10px rgba(225, 29, 72, 0.15);
+        }
+
+        .terminal-box {
+            background: #000;
+            border: 1px solid #3f3f46;
+            border-radius: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #18181b;
+            border-bottom: 1px solid #3f3f46;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Typography */
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-accent {
+            background: linear-gradient(135deg, #fb7185 0%, #be123c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
             }
+        }
+
+        /* Subtle scanline overlay for images/decorative elements */
+        .scanline-fx::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="crt-bg">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-8 h-8 rounded bg-gradient-to-br from-zxred to-rose-900 flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(225,29,72,0.5)]">
+                    CD
+                </div>
+                <span class="font-bold text-lg tracking-wide text-zinc-100 uppercase">Legacy</span>
+            </div>
+            <div class="hidden md:flex gap-8 font-mono text-sm text-zinc-400">
+                <a href="#biography" class="hover:text-zxred transition-colors">01. Bio</a>
+                <a href="#emulators" class="hover:text-zxred transition-colors">02. Emulators</a>
+                <a href="#software" class="hover:text-zxred transition-colors">03. Software</a>
+                <a href="#legacy" class="hover:text-zxred transition-colors">04. Impact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header
+        class="relative pt-40 pb-20 md:pt-52 md:pb-32 px-6 max-w-7xl mx-auto flex flex-col items-center text-center">
+        <div
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-zinc-800 bg-zinc-900/50 text-xs font-mono text-zinc-400 mb-8 reveal">
+            <span class="w-2 h-2 rounded-full bg-zxred animate-pulse"></span>
+            Dutch Physicist & ZX81 Software Developer
+        </div>
+
+        <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter mb-6 reveal">
+            <span class="text-gradient">Carlo</span><br>
+            <span class="text-accent text-7xl md:text-9xl tracking-tight">Delhez</span>
+        </h1>
+
+        <p class="max-w-2xl text-lg md:text-xl text-zinc-400 font-light leading-relaxed mb-12 reveal">
+            Known as Jacobus Laurentius Delhez, a pioneer whose dedication to the Sinclair ZX81 ensured its survival
+            through robust emulators, utilities, and definitive benchmark tests.
+        </p>
+
+        <a href="#biography"
+            class="group flex items-center gap-3 font-mono text-sm text-white hover:text-zxred transition-colors reveal">
+            <span>EXPLORE THE ARCHIVE</span>
+            <svg class="w-4 h-4 transform group-hover:translate-y-1 transition-transform" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3">
+                </path>
+            </svg>
+        </a>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 space-y-32 pb-32">
+
+        <!-- Two Column: Bio & Infobox -->
+        <section id="biography" class="grid md:grid-cols-12 gap-12 items-start pt-20">
+            <!-- Infobox Column -->
+            <div class="md:col-span-5 reveal">
+                <div class="terminal-box shadow-2xl">
+                    <div class="terminal-header">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="ml-2 text-xs font-mono text-zinc-500">INFOBOX.DAT</span>
+                    </div>
+                    <div class="p-6 font-mono text-sm space-y-4 text-zinc-300">
+                        <div class="flex border-b border-zinc-800 pb-3">
+                            <span class="w-1/3 text-zinc-500">NAME</span>
+                            <span class="w-2/3 text-white">Jacobus Laurentius Delhez</span>
+                        </div>
+                        <div class="flex border-b border-zinc-800 pb-3">
+                            <span class="w-1/3 text-zinc-500">BORN</span>
+                            <span class="w-2/3">Steenbergen, Netherlands</span>
+                        </div>
+                        <div class="flex border-b border-zinc-800 pb-3">
+                            <span class="w-1/3 text-zinc-500">DIED</span>
+                            <span class="w-2/3">Oct 17, 2015<br><span class="text-xs text-zinc-500">Bergen op Zoom,
+                                    NL</span></span>
+                        </div>
+                        <div class="flex border-b border-zinc-800 pb-3">
+                            <span class="w-1/3 text-zinc-500">OCCUPATION</span>
+                            <span class="w-2/3 text-zxred">Physicist / Developer</span>
+                        </div>
+                        <div class="flex text-xs text-zinc-400 pt-2">
+                            > SYSTEM.AWAITING_INPUT<span class="cursor-blink">_</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bio Column -->
+            <div class="md:col-span-7 space-y-8 reveal">
+                <div>
+                    <h2 class="text-3xl font-bold mb-4 text-white">The Scientific Mind</h2>
+                    <div class="h-1 w-20 bg-zxred mb-8"></div>
+                    <p class="text-zinc-400 leading-relaxed max-w-prose">
+                        Delhez applied the rigorous logic of a physicist to the world of software development. In 1994,
+                        he received his doctorate from the <strong>Eindhoven University of Technology</strong>,
+                        delivering a thesis titled <em class="text-zinc-200">"The azimuthally varying field racetrack
+                            microtron"</em>.
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed max-w-prose mt-4">
+                        While his academic career explored complex physics, his passion for computing centered on
+                        Sinclair platforms. Even as technological paradigms shifted, Delhez remained an anchor for the
+                        ZX81 community, building tools that defied the hardware limitations of the era.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emulators Section -->
+        <section id="emulators" class="pt-20">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold text-white mb-4">Emulator Masterpieces</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto">Bridging the 8-bit past to modern architectures through
+                    high-performance simulation.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- XTender -->
+                <div class="glass-card p-8 rounded-2xl reveal relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <svg class="w-24 h-24 text-zxred" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M4 6h16v12H4z" opacity="0.3" />
+                            <path
+                                d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h8v2H6z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">XTender & XTender II</h3>
+                    <div
+                        class="text-xs font-mono text-zxred mb-6 border border-zxred/30 inline-block px-3 py-1 rounded bg-zxredmax">
+                        MS-DOS / WINDOWS</div>
+                    <p class="text-zinc-400 leading-relaxed mb-6 relative z-10">
+                        A definitive emulation suite running ZX80, ZX81, and Aszmic ROMs. XTender set a standard by
+                        introducing direct audio loading/saving via soundcards, a virtual tape interface, multiple
+                        keyboard layouts, and an advanced "TV emulator" to faithfully reproduce original video
+                        behaviors.
+                    </p>
+                </div>
+
+                <!-- XTricator -->
+                <div class="glass-card p-8 rounded-2xl reveal relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <svg class="w-24 h-24 text-zxred" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22 9L12 2 2 9v11a2 2 0 002 2h16a2 2 0 002-2V9z" opacity="0.3" />
+                            <path
+                                d="M12 4.22L19.78 9 12 13.78 4.22 9 12 4.22M12 2L2 9v11a2 2 0 002 2h16a2 2 0 002-2V9l-10-7zm0 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">XTricator</h3>
+                    <div
+                        class="text-xs font-mono text-zinc-400 mb-6 border border-zinc-700 inline-block px-3 py-1 rounded">
+                        SINCLAIR QL</div>
+                    <p class="text-zinc-400 leading-relaxed mb-6">
+                        Announced in 1992, XTricator allowed the 16-bit Sinclair QL to flawlessly run ZX81 software.
+                        Praised in reviews like the <i>International QL Report</i>, the emulator saw continued
+                        development, with version 1.75 reaching <i>Update Magazine</i> in 1994.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Software ecosystem Grid -->
+        <section id="software" class="pt-20">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal">
+                <div>
+                    <h2 class="text-4xl font-bold text-white mb-4">Software Ecosystem</h2>
+                    <p class="text-zinc-400 max-w-xl">Tools, interpreters, and utilities that expanded what was possible
+                        on Sinclair hardware.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-card p-8 rounded-xl reveal flex flex-col h-full border-t-2 border-t-zxred">
+                    <div class="text-4xl mb-4 font-mono text-white opacity-20">01</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Coral Basic Interpreter</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed flex-grow">
+                        Developed in 1987 for the 16K ZX81 (Terminal Software). It provided an updated BASIC
+                        environment, introduced new commands, and featured a revolutionary full-entry editor. This
+                        allowed users to bypass the tedious Sinclair keyword-token entry system entirely.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card p-8 rounded-xl reveal flex flex-col h-full border-t-2 border-t-zinc-600">
+                    <div class="text-4xl mb-4 font-mono text-white opacity-20">02</div>
+                    <h3 class="text-xl font-bold text-white mb-3">ZX-Assembler-2</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed flex-grow">
+                        A massive revision of Artic Computing's original assembler in 1991. Delhez added the much needed
+                        <code>ORG</code> directive and various profound optimizations, solidifying it as a staple tool
+                        for low-level developers.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card p-8 rounded-xl reveal flex flex-col h-full border-t-2 border-t-zinc-600">
+                    <div class="text-4xl mb-4 font-mono text-white opacity-20">03</div>
+                    <h3 class="text-xl font-bold text-white mb-3">ZX81Tape</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed flex-grow">
+                        Announced in 1995 via <i>Update Magazine</i>, this crucial preservation utility allowed users to
+                        bridge analog and digital mediums by converting cassette-based ZX81 programs directly into
+                        mountable MS-DOS files.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Legacy & Benchmark Section -->
+        <section id="legacy" class="pt-20 reveal">
+            <div
+                class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-3xl p-8 md:p-16 relative overflow-hidden">
+                <div class="absolute inset-0 scanline-fx opacity-20"></div>
+
+                <div class="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="uppercase tracking-widest text-zxred font-bold text-sm mb-4">The Standard of Truth
+                        </div>
+                        <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">CLCKFREQ</h2>
+                        <p class="text-zinc-400 text-lg leading-relaxed mb-6">
+                            Among his native utilities was the <strong>ZX81 Processor Test (1991)</strong>, commonly
+                            circulated as <code>CLCKFREQ</code>. It was meant to stress-test 2K ZX81 hardware
+                            configurations.
+                        </p>
+                        <blockquote class="border-l-4 border-zxred pl-4 py-2 italic text-zinc-300">
+                            "Decades after its original release, Delhez's utility remains the definitive benchmark. In
+                            2022, the iOS emulator 'ZX81' specifically cited scoring 100% on CLCKFREQ as proof of its
+                            cycle-exact accuracy."
+                        </blockquote>
+                    </div>
+
+                    <div class="terminal-box h-full min-h-[300px] flex flex-col">
+                        <div class="terminal-header">
+                            <span class="text-xs font-mono text-zinc-500">CLCKFREQ.BIN - PERFORMANCE TEST</span>
+                        </div>
+                        <div
+                            class="p-6 font-mono text-xs md:text-sm text-green-400 flex flex-col gap-2 h-full justify-center">
+                            <div class="opacity-50">INITIATING Z80 CLOCK DIAGNOSTIC...</div>
+                            <div class="opacity-70">MEASURING T-STATES...</div>
+                            <div class="my-4">
+                                <span class="bg-green-400/20 text-green-300 px-2 py-1">> CPU FREQUENCY: 3.250 MHz</span>
+                            </div>
+                            <div>> SYNC VALIDATION: <span class="text-white">SUCCESS</span></div>
+                            <div>> TIMING ACCURACY: <span class="text-zxred font-bold">100% (DELHEZ CERTIFIED)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Other Games row -->
+        <section class="reveal">
+            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-4">
+                <span class="w-10 h-[1px] bg-zinc-700"></span> Other Software <span
+                    class="w-10 h-[1px] bg-zinc-700"></span>
+            </h3>
+            <div class="flex flex-wrap gap-4">
+                <div class="px-5 py-3 rounded-full border border-zinc-800 bg-zinc-900 flex items-center gap-3">
+                    <span class="w-2 h-2 rounded-full bg-zinc-600"></span>
+                    <span class="text-zinc-300 font-medium">Red Ants <span
+                            class="text-zinc-500 text-sm ml-1">(1984)</span></span>
+                </div>
+                <div class="px-5 py-3 rounded-full border border-zinc-800 bg-zinc-900 flex items-center gap-3">
+                    <span class="w-2 h-2 rounded-full bg-zinc-600"></span>
+                    <span class="text-zinc-300 font-medium">Graffity <span
+                            class="text-zinc-500 text-sm ml-1">(1989)</span></span>
+                </div>
+                <div class="px-5 py-3 rounded-full border border-zinc-800 bg-zinc-900 flex items-center gap-3">
+                    <span class="w-2 h-2 rounded-full bg-zinc-600"></span>
+                    <span class="text-zinc-300 font-medium font-mono text-sm">ZX-81 Time <span
+                            class="text-zinc-500 ml-1">(1991)</span></span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-800/50 bg-black py-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-8 items-center">
+            <div>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-6 h-6 rounded bg-zxred flex items-center justify-center font-bold text-white text-xs">
+                        CD</div>
+                    <span class="font-bold text-white tracking-widest uppercase text-sm">Archives</span>
+                </div>
+                <p class="text-zinc-500 text-sm max-w-sm">
+                    Preserving the memory of Dr. Carlo Delhez, an unsung hero of home computing who refused to let great
+                    platforms die.
+                </p>
+            </div>
+            <div class="md:text-right font-mono text-xs text-zinc-600 space-y-2">
+                <p>Data extrapolated from historical Wikipedia Draft metrics.</p>
+                <p>&copy; 2026 Retro Preservation Society.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Animations script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+
+            const revealOnScroll = () => {
+                const windowHeight = window.innerHeight;
+                const elementVisible = 100;
+
+                reveals.forEach((element) => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - elementVisible) {
+                        element.classList.add('active');
+                    }
+                });
+            };
+
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll(); // Trigger immediately on load
         });
     </script>
 </body>
+
 </html>
